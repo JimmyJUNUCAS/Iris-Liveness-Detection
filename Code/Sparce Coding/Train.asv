@@ -1,0 +1,24 @@
+clear;clc;
+addpath('Sparse coding');
+%% 可见光
+dir = '../../陕文投书画数据/2016.3.2初次实验_可见光/';
+fname = [dir, 'swt_2016_03_02_11_20_47/raw'];
+datacube = read_raw(fname);
+% A = datacube(:,:,[176,115,62]);
+% imshow(A*10);
+im1 = datacube([390:2700],:,:);
+clear datacube 
+
+
+fname = [dir, 'swt_2016_03_02_11_16_30/raw'];
+datacube = read_raw(fname);
+im2 = datacube([390:2700],:,:);
+clear datacube
+
+X = reshape(im,[],size(im,3))';
+
+%% Sparse Coding
+codebook_size = 1024;
+lambda = 0.1;
+Binit = X(:, idx(1:codebook_size));
+D = sparse_coding(im', codebook_size, lambda/2, 'L1', [], 50, 5000, [], [], Binit);
